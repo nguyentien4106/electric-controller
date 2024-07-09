@@ -1,0 +1,64 @@
+.demo-logo{
+  cursor: pointer;
+  border-radius: 10px;
+  font-size: 22px;
+  font-size: 22px;
+    font-family: 'Minion Pro', serif;
+    line-height: 30px;
+    font-weight: 800;
+    margin-bottom: 5px;
+}
+
+.logo{
+    color: rgb(20, 168, 0);
+}
+
+.ant-layout-sider-trigger{
+    position: absolute !important;
+}
+
+.footer{
+    padding: 10px !important;
+    /* position: absolute;
+    bottom: 20px;
+    left: 0;
+    right: 0; */
+}
+
+@media only screen and (max-width: 600px){
+    main {
+        padding: 0 !important;
+    }
+
+    .collaborator-setting{
+        flex-direction: column;
+    }
+
+    .footer div div:nth-child(3){
+        display: none;
+    }
+
+
+}
+
+
+.pointer{
+    cursor: pointer;
+}
+
+
+.collaborator{
+    position: relative;
+}
+
+.collaborator div{
+    width: 100%;
+}
+
+.text-center{
+    text-align: center;
+}
+
+body{
+    font-size: 14px;
+}
