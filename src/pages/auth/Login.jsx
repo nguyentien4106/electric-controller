@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { hide, show } from "@/state/loading/loadingSlice";
+import { setClient, getClient } from "@/state/mqtt/mqttSlice";
 import {
     App,
     Button,
@@ -16,6 +17,7 @@ import mqtt from "mqtt";
 import { defaultLoginOptions } from "../../constant/options";
 import { Cookie } from "../../lib/cookies";
 import dayjs from "dayjs";
+import { KEY_DECODE } from "../../constant/settings";
 const { useToken } = theme;
 const { useBreakpoint } = Grid;
 const { Text, Title, Link } = Typography;
@@ -84,7 +86,9 @@ function Login() {
             password,
         }).then((client) => {
             if (client.connected) {
-                Cookie.setUser(username)
+                const cookieClient = btoa(`${username}${KEY_DECODE}${password}`)
+                Cookie.setUser(cookieClient)
+                dispatch(setClient({ client }))
                 navigate("/home");
             }
 

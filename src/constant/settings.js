@@ -23,3 +23,5 @@ export const ORDERS_STATUS = {
     Denied: 1,
     Approved: 2
 }
+
+export const KEY_DECODE = "~=/;-="
