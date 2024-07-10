@@ -3,11 +3,44 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Cookie } from "../../lib/cookies";
 import { defaultLoginOptions } from "../../constant/options";
-import { App, Button, message } from "antd";
+import { App, Button, Divider, message } from "antd";
 import AuthorizeView from '@/components/auth/AuthorizeView'
 import { dispatch } from "../../state/store";
+import Devices from "../../components/home/Devices";
+import OverallParams from "../../components/home/OverallParams";
+
+import gridPowerImg from "@/assets/gridPower.png"
+import pvPowerImg from "@/assets/pvPower.png"
+import outPowerImg from "@/assets/outPower.png"
+import consumptionPowerImg from "@/assets/consumptionPower.png"
 
 const topic = "test-topic"
+
+const height = "50%"
+const defaultValueParams = {
+    pvPower: {
+        today: 1000,
+        total: 1234,
+        icon: <img src={pvPowerImg} height={height}></img>
+    },
+    outPower: {
+        today: 100,
+        total: 200,
+        icon: <img src={outPowerImg} height={height}></img>
+    },
+    gridPower: {
+        today: 300,
+        total: 1300,
+        icon: <img src={gridPowerImg} height={height}></img>
+
+    },
+    consumptionPower: {
+        today: 400,
+        total: 1400,
+        icon: <img src={consumptionPowerImg} height={height}></img>
+
+    }
+}
 
 export default function Home() {
     const [client, setClient] = useState(null)
@@ -49,7 +82,6 @@ export default function Home() {
 
     useEffect(() => {
         if(client){
-            console.log('listerner',client)
             client.on("message", (topic, message) => {
                 setMessages(prev => [...prev, `received message: ${message} from topic: ${topic}`])
             });
@@ -58,23 +90,7 @@ export default function Home() {
 
     const delay = millis => new Promise((resolve, reject) => {
         setTimeout(_ => resolve(), millis)
-      });
-
-    useEffect(() => {
-        const pubtest = async () => {
-            if(isTest && testClient){
-                let i = 0;
-                while(true){
-                    console.log(`test ${i}`)
-                    testClient.publishAsync(topic, `Test message from test client ${i++}`)
-                    await delay(3000)
-                }
-            }
-        }
-
-        pubtest()
-        
-    }, [isTest])
+    });
 
     const subcribe = () => {
         if(client){
@@ -99,16 +115,55 @@ export default function Home() {
             alert("error")
         }
     }
+    const handleTest = () => {
+        if(!isTest){
+            message.info("Đã bắt đầu test")
+            setIsTest(true)
+            
+        }
+        else {
+            setIsTest(false)
+
+            message.info("Đã dừng test")
+        }
+    }
+
+    useEffect(() =>{
+        if(isTest){
+            const a = async () => {
+                while(isTest){
+                    setValueParams(prev => {
+                        const random = Math.random() * 10;
+                        const result = {...prev}
+                        for (const [key] of Object.entries(prev)) {
+                            result[`${key}`].today += random
+                            result[`${key}`].total += random
+                        }
+                        return result
+                    })
+
+                    await delay(3000)
+                }
+            }
+
+            a()
+        }
+        return () => {
+            setIsTest(false)
+        }
+    }, [isTest])
+
+    const [valueParams, setValueParams] = useState(defaultValueParams)
 
     return (
         <AuthorizeView >
-            <h1>Home</h1>
             <Button onClick={subcribe}>Subcribe to "test-topic"</Button>
             <Button onClick={unsubcribe}>Unsubcribe</Button>
-            <Button onClick={() => setIsTest(prev => !prev)}>{isTest ? "Stop test" : "Start test"}</Button>
-            {
-                messages && messages.map(item => <h3 key={item}>{item}</h3>)
-            }
+            <Button onClick={handleTest}>{isTest ? "Stop test" : "Start test"}</Button>
+            <Divider />
+            <Devices />
+            <Divider />
+            <OverallParams values={valueParams} />
         </AuthorizeView>
     );
 }
