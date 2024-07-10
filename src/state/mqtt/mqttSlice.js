@@ -12,7 +12,7 @@ const mqttSlice = createSlice({
             return state.client
         },
         setClient: (state, action) => {
-            state.client = action.payload.client
+            state.client = action.payload
         }
     }
 })

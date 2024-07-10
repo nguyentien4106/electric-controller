@@ -77,7 +77,7 @@ function Login() {
         const username = values.email.split("@")[0];
         const password = values.password;
         const clientId = username + dayjs().format("DD_MM_YYYY_HH:mm:ssZ");
-        dispatch(show());
+        dispatch(show({type: "SHOW_LOADING"}));
 
         mqtt.connectAsync({
             ...defaultLoginOptions,
@@ -88,7 +88,7 @@ function Login() {
             if (client.connected) {
                 const cookieClient = btoa(`${username}${KEY_DECODE}${password}`)
                 Cookie.setUser(cookieClient)
-                dispatch(setClient({ client }))
+                dispatch(setClient(client))
                 navigate("/home");
             }
 
@@ -96,7 +96,7 @@ function Login() {
             message.error(ex.message)
         }
         ).finally(()=> {
-            dispatch(hide());
+            dispatch(hide({type: "HIDE_LOADING"}));
         });
     };
 
