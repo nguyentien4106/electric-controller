@@ -28,6 +28,12 @@ const getUser = () => {
 }
 
 const getUserInfo = () => {
+    const user = getUser()
+
+    if(!user){
+        return {}
+    }
+
     const info = atob(getUser()).split(KEY_DECODE)
 
     if(!info || info.length < 2){

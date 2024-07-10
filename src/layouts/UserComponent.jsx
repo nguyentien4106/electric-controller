@@ -4,6 +4,7 @@ import { Avatar, Popover, Space } from 'antd';
 import LogoutLink from '@/components/auth/LogoutLink';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import { Cookie } from '../lib/cookies';
 
 const Item = ({ icon, value }) => (
     <Space align='center'>
@@ -11,9 +12,10 @@ const Item = ({ icon, value }) => (
         {value}
     </Space>
 )
-function UserComponent({ user }) {
+function UserComponent() {
     const [open, setOpen] = useState(false)
     const userRef = useRef()
+    const userInfo = Cookie.getUserInfo()
 
     useEffect(() => {
         function handleClickOutside(event) {
@@ -35,7 +37,7 @@ function UserComponent({ user }) {
         >
             <div className='user-option'>
                 <Item 
-                    value={<strong style={{textAlign: "center"}}>Xin chào {user}</strong>} 
+                    value={<strong style={{textAlign: "center"}}>Xin chào {userInfo.username}</strong>} 
                 />
             </div>
             <div className='user-option'>

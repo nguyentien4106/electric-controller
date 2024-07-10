@@ -9,10 +9,8 @@ const { Link } = Typography;
 
 function LogoutLink() {
     const navigate = useNavigate()
-    const { client } = useSelector(state => state.mqtt)
     const handleLogout = (e) => {
         e.preventDefault();
-        client.end()
         Cookie.removeUser()
         navigate("/")
     }

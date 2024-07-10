@@ -13,17 +13,12 @@ export default function Header() {
     const { token } = useToken();
     const screens = useBreakpoint();
     const navigate = useNavigate()
-    const [current, setCurrent] = useState("");
     const styles = getStyles(screens, token)
     const user = getUser()
-    console.log(user)
-    const onClick = (e) => {
-        setCurrent(e.key);
-    };
 
     const renderAuth = () => {
         return user ? (
-            <UserComponent user={user} />
+            <UserComponent/>
         ) : (
             <Space>
                 <Button
@@ -46,7 +41,6 @@ export default function Header() {
                         className="demo-logo logo"
                         onClick={() => {
                             navigate("/");
-                            setCurrent("");
                         }}
                     >
                         ePower.vn

@@ -19,16 +19,13 @@ function AuthorizeView(props) {
                 }}>
                     <Text style={{
                         fontSize: 14
-                    }}>Bạn cần {<Link onClick={() => navigate("/login")}>đăng nhập</Link>} để tiếp tục</Text>{" "}
-                    
-                    <Text style={{
-                    }}>Hoặc {<Link onClick={() => navigate("/register")}>đăng ký</Link>} nếu chưa có tài khoản</Text>{" "}
+                    }}>Bạn cần {<Link onClick={() => navigate("/")}>đăng nhập</Link>} để tiếp tục</Text>{" "}
                 </Flex>
             </Flex>
         );
     }
 
-    if (ROLES[user.role] >= props.role) {
+    if (user) {
         return <>{props.children}</>;
     }
 
