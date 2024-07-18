@@ -20,6 +20,7 @@ const devicesSlice = createSlice({
         },
         update: (state, action) => {
             state.devices = state.devices.map(item => item.id === action.payload.id ? action.payload : item)
+            setLocal(LOCAL_KEY_DEVICES, state.devices)
         }
     }
 })

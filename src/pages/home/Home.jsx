@@ -45,15 +45,10 @@ export default function Home() {
     const { client } = useSelector((state) => state.mqtt);
     const { devices } = useSelector((state) => state.devices);
     const { message } = App.useApp();
-    const [valueParams, setValueParams] = useState(defaultValueParams);
-    const [messages, setMessages] = useState("{}");
     const userInfo = Cookie.getUserInfo();
     const topic = userInfo.username;
     const dispatch = useDispatch();
 
-    useEffect(() => {
-        console.log(devices);
-    }, [devices]);
     const connectToMQTT = () => {
         mqtt.connectAsync({
             ...defaultLoginOptions,

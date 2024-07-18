@@ -12,39 +12,77 @@ import {
     Table,
     Typography,
 } from "antd";
-import React, { useId, useRef, useState } from "react";
-import { getLocal, setLocal } from "../../lib/helper";
+import React, { useEffect, useId, useRef, useState } from "react";
+import { getLocal, getUser, getUserName, setLocal } from "../../lib/helper";
 import { LOCAL_KEY_DEVICES } from "../../constant/settings";
 import addBtn from "@/assets/add.png";
 import deleteBtn from "@/assets/delete.png";
 import { useDispatch, useSelector } from "react-redux";
 import { add, remove, update } from "../../state/devices/devicesSlice";
+import MQTT from "../../lib/MQTT";
 
 const defaultItem = {
     id: "",
     label: "",
     value: "",
 };
+
+const pingTopic = "testping";
+
 export default function Devices() {
+    const { client } = useSelector((state) => state.mqtt);
     const { devices } = useSelector((state) => state.devices);
     const [selected, setSelected] = useState(defaultItem);
     const [open, setOpen] = useState(false);
-    const addDeviceRef = useRef();
     const { message } = App.useApp();
+    const [loading, setLoading] = useState(false);
+    const addDeviceRef = useRef();
     const dispatch = useDispatch();
+
+    useEffect(() => {
+        if (client) {
+            client.on("message", (topic, msg) => {
+                if (topic === pingTopic) {
+                    const response = JSON.parse(msg);
+                    console.log(response)
+                    if (response && response.verified) {
+                        if (response.verified) {
+                            dispatch(add({ ...response.device, verified: true }));
+                            setOpen(false);
+                            message.success("Add new device successfully.");
+                        } else {
+                            message.error(
+                                "Some error unexpected occurs when add new device."
+                            );
+                        }
+
+                        setLoading(false);
+                    }
+                }
+            });
+        }
+    }, [client]);
 
     const onFinish = (device) => {
         if (devices.some((dv) => dv.id === device.id)) {
-            if (devices.some((dv) => dv.id !== device.id && dv.value === device.value)) {
+            if (
+                devices.some(
+                    (dv) => dv.id !== device.id && dv.value === device.value
+                )
+            ) {
                 message.error("Device's ID is existed");
                 return;
             }
-    
-            if (devices.some((dv) => dv.id !== device.id && dv.label === device.label)) {
+
+            if (
+                devices.some(
+                    (dv) => dv.id !== device.id && dv.label === device.label
+                )
+            ) {
                 message.error("Device's name is existed");
                 return;
             }
-            dispatch(update(device));
+            dispatch(update({ ...device, verified: false }));
             setOpen(false);
             return;
         }
@@ -60,8 +98,29 @@ export default function Devices() {
         }
 
         const lastDevice = devices.at(-1);
-        dispatch(add({ ...device, id: lastDevice ? lastDevice.id + 1 : 1}));
-        setOpen(false);
+        const newDevice = {
+            ...device,
+            id: lastDevice ? lastDevice.id + 1 : 1,
+            verified: false,
+        };
+        const verifiedParams = {
+            topic: pingTopic,
+            qos: 2,
+            payload: JSON.stringify({
+                // userName: getUserName(),
+                // value: device.value,
+                topic: `${getUserName()}/${device.value}`,
+                device: newDevice,
+            }),
+        };
+        setLoading(true);
+        MQTT.subscribe(client, { topic: pingTopic, qos: 0 });
+        MQTT.publish(client, verifiedParams);
+        // setOpen(false);
+    };
+
+    const verifyDevice = (device) => {
+        dispatch(update({ ...device, verified: true }));
     };
 
     return (
@@ -131,12 +190,51 @@ export default function Devices() {
                         );
                     }}
                 ></Table.Column>
+                <Table.Column
+                    width={"20%"}
+                    key={"status"}
+                    title="Status"
+                    render={(item) => {
+                        return item.verified ? (
+                            <svg
+                                viewBox="0 0 24 24"
+                                xmlns="http://www.w3.org/2000/svg"
+                                width={24}
+                            >
+                                <path
+                                    d="M12 1a11 11 0 1 0 11 11A11 11 0 0 0 12 1Zm5.707 8.707-7 7a1 1 0 0 1-1.414 0l-3-3a1 1 0 0 1 1.414-1.414L10 14.586l6.293-6.293a1 1 0 0 1 1.414 1.414Z"
+                                    fill="#66d154"
+                                    class="fill-232323"
+                                ></path>
+                            </svg>
+                        ) : (
+                            <Space>
+                                <svg
+                                    viewBox="0 0 48 48"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width={24}
+                                >
+                                    <path d="M0 0h48v48H0z" fill="none"></path>
+                                    <path
+                                        d="M24 4C12.96 4 4 12.95 4 24s8.96 20 20 20 20-8.95 20-20S35.04 4 24 4zm2 30h-4v-4h4v4zm0-8h-4V14h4v12z"
+                                        fill="#c73232"
+                                        class="fill-000000"
+                                    ></path>
+                                </svg>
+                                <Button onClick={() => verifyDevice(item)}>
+                                    Verify
+                                </Button>
+                            </Space>
+                        );
+                    }}
+                ></Table.Column>
             </Table>
             {open && (
                 <Modal
                     open={open}
                     onCancel={() => setOpen(false)}
                     onOk={() => addDeviceRef.current.click()}
+                    confirmLoading={loading}
                 >
                     <h3>New Device's Info</h3>
                     <Form
@@ -154,7 +252,7 @@ export default function Devices() {
                         initialValues={{
                             value: selected.value,
                             label: selected.label,
-                            id: selected.id
+                            id: selected.id,
                         }}
                         onFinish={onFinish}
                         autoComplete="off"

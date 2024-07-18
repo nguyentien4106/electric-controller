@@ -18,7 +18,13 @@ export const getLocal = (key, defaultValue) => {
 }
 
 
-export const getUserName = email => email ? email.split("@")[0] : ""
+export const getUserName = email => {
+    if(email) {
+        return email ? email.split("@")[0] : ""
+    }
+
+    return Cookie.getUserInfo().username.split("@")[0]
+}
 
 export const getAge = birthDate => Math.floor((new Date() - new Date(birthDate).getTime()) / 3.15576e+10)
 
@@ -27,7 +33,6 @@ export const getYear = birthDate => birthDate?.substring(0, 4)
 export const getUser = () => {
     return Cookie.getUser()
 }
-
 
 export const isObjectEmpty = obj => Object.keys(obj).length === 0
 
