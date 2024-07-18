@@ -7,10 +7,11 @@ export default class MQTT{
     }
 
     static disconnect = (client) => {
-        if (client.connected) {
+        if (client?.connected) {
           try {
-            client.end(false, () => {
+            client?.end(false, () => {
               console.log('disconnected successfully')
+              console.log(client)
             })
           } catch (error) {
             console.log('disconnect error:', error)

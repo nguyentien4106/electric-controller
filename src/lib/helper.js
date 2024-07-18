@@ -3,9 +3,20 @@ import { Cookie } from "./cookies"
 
 export const generateMessages = (messages) => Object.values(messages).join("\n")
 
-export const setLocal = (key, value) => localStorage.setItem(key, value)
+export const setLocal = (key, value) => localStorage.setItem(key, JSON.stringify(value))
 
-export const getLocal = key => localStorage.getItem(key) ?? null
+export const getLocal = (key, defaultValue) => {
+    const value = localStorage.getItem(key)
+
+    if(!defaultValue){
+        return value ?? null
+    }
+
+    const data = JSON.parse(value)
+
+    return data ?? defaultValue
+}
+
 
 export const getUserName = email => email ? email.split("@")[0] : ""
 
@@ -17,24 +28,8 @@ export const getUser = () => {
     return Cookie.getUser()
 }
 
-export const showMoney = (value) => {
-    const formatter = new Intl.NumberFormat('en-US', {
-        style: 'currency',
-        currency: 'VND',
-    });
-    
-    return formatter.format(value ?? 0)
-}
 
 export const isObjectEmpty = obj => Object.keys(obj).length === 0
 
-
-export const getBase64 = (file) =>
-    new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.readAsArrayBuffer(file);
-        reader.onload = () => resolve(reader.result);
-        reader.onerror = (error) => reject(error);
-    });
 
 export const showNumber = number => new Intl.NumberFormat().format(number)

@@ -3,13 +3,15 @@ import { configureStore } from "@reduxjs/toolkit";
 import loadingReducer from './loading/loadingSlice'
 import userSlice from "./user/userSlice";
 import mqttSlice from "./mqtt/mqttSlice";
+import devicesSlice from "./devices/devicesSlice";
 import logger from 'redux-logger'
 
 export const store = configureStore({
     reducer: {
         loading: loadingReducer,
         user: userSlice,
-        mqtt: mqttSlice
+        mqtt: mqttSlice,
+        devices: devicesSlice
     },
     middleware: (getDefaultMiddleware) => getDefaultMiddleware({
         serializableCheck: false,

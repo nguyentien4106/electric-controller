@@ -5,7 +5,7 @@ const initialState = {
 }
 
 const mqttSlice = createSlice({
-    name: "loading",
+    name: "mqtt",
     initialState,
     reducers: {
         getClient: (state) => {

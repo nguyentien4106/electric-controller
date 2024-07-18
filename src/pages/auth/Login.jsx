@@ -18,6 +18,7 @@ import { defaultLoginOptions } from "../../constant/options";
 import { Cookie } from "../../lib/cookies";
 import dayjs from "dayjs";
 import { KEY_DECODE } from "../../constant/settings";
+import CircularJSON from "circular-json";
 const { useToken } = theme;
 const { useBreakpoint } = Grid;
 const { Text, Title, Link } = Typography;
@@ -88,7 +89,9 @@ function Login() {
             if (client.connected) {
                 const cookieClient = btoa(`${username}${KEY_DECODE}${password}`)
                 Cookie.setUser(cookieClient)
+                console.log(client)
                 dispatch(setClient(client))
+                localStorage.setItem("client", CircularJSON.stringify(client))
                 navigate("/home");
             }
 
@@ -99,7 +102,6 @@ function Login() {
             dispatch(hide({type: "HIDE_LOADING"}));
         });
     };
-
 
 
     return (
