@@ -44,18 +44,17 @@ export default function Devices() {
             client.on("message", (topic, msg) => {
                 if (topic === pingTopic) {
                     const response = JSON.parse(msg);
-                    console.log(response)
-                    if (response && response.verified) {
-                        if (response.verified) {
-                            dispatch(add({ ...response.device, verified: true }));
-                            setOpen(false);
-                            message.success("Add new device successfully.");
-                        } else {
-                            message.error(
-                                "Some error unexpected occurs when add new device."
-                            );
-                        }
+                    console.log(response);
+                    if (response.verified) {
+                        dispatch(add({ ...response.device, verified: true }));
+                        setOpen(false);
+                        message.success("Add new device successfully.");
 
+                        setLoading(false);
+                    }
+                    else if(response.verified !== undefined && !response.verified){
+                        setOpen(false);
+                        message.error("Your Device's ID was not found in system. Please try again!");
                         setLoading(false);
                     }
                 }
@@ -107,8 +106,6 @@ export default function Devices() {
             topic: pingTopic,
             qos: 2,
             payload: JSON.stringify({
-                // userName: getUserName(),
-                // value: device.value,
                 topic: `${getUserName()}/${device.value}`,
                 device: newDevice,
             }),
@@ -116,7 +113,6 @@ export default function Devices() {
         setLoading(true);
         MQTT.subscribe(client, { topic: pingTopic, qos: 0 });
         MQTT.publish(client, verifiedParams);
-        // setOpen(false);
     };
 
     const verifyDevice = (device) => {
@@ -204,7 +200,7 @@ export default function Devices() {
                                 <path
                                     d="M12 1a11 11 0 1 0 11 11A11 11 0 0 0 12 1Zm5.707 8.707-7 7a1 1 0 0 1-1.414 0l-3-3a1 1 0 0 1 1.414-1.414L10 14.586l6.293-6.293a1 1 0 0 1 1.414 1.414Z"
                                     fill="#66d154"
-                                    class="fill-232323"
+                                    className="fill-232323"
                                 ></path>
                             </svg>
                         ) : (
@@ -218,7 +214,7 @@ export default function Devices() {
                                     <path
                                         d="M24 4C12.96 4 4 12.95 4 24s8.96 20 20 20 20-8.95 20-20S35.04 4 24 4zm2 30h-4v-4h4v4zm0-8h-4V14h4v12z"
                                         fill="#c73232"
-                                        class="fill-000000"
+                                        className="fill-000000"
                                     ></path>
                                 </svg>
                                 <Button onClick={() => verifyDevice(item)}>
