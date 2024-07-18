@@ -17,6 +17,7 @@ import MQTT from "../../lib/MQTT";
 import { setClient } from "../../state/mqtt/mqttSlice";
 import { AndroidOutlined, AppleOutlined } from '@ant-design/icons';
 import "./index.css"
+import System from "../../components/home/System";
 const height = "50%";
 const defaultValueParams = {
     pvPower: {
@@ -96,7 +97,7 @@ export default function Home() {
         {
             key: "system",
             label: `System`,
-            children: <div>Value</div>,
+            children: <System />,
             icon: <AppleOutlined />,
         },
         {
@@ -109,7 +110,7 @@ export default function Home() {
     return (
         <AuthorizeView>
             <Tabs
-                defaultActiveKey="system"
+                defaultActiveKey="devices"
                 items={items}
                 centered
             />

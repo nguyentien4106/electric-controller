@@ -7,3 +7,5 @@ export const ROLES = {
 export const KEY_DECODE = "~=/;-="
 
 export const LOCAL_KEY_DEVICES = "epower.devices"
+
+export const PING_TOPIC = "checking_device_topic"
