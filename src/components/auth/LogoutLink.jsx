@@ -6,14 +6,15 @@ import mqtt from "mqtt";
 import { useSelector } from "react-redux";
 import MQTT from "../../lib/MQTT";
 import CircularJSON from "circular-json";
+import { useTranslation } from "react-i18next";
 
 const { Link } = Typography;
 
 function LogoutLink() {
     const navigate = useNavigate()
     const { client } = useSelector(state => state.mqtt)
-    // const client = CircularJSON.parse(localStorage.getItem("client"))
-    console.log(client)
+    const { t } = useTranslation()
+
     const handleLogout = (e) => {
         e.preventDefault();
         MQTT.disconnect(client)
@@ -22,7 +23,7 @@ function LogoutLink() {
     }
 
     return (
-        <Link onClick={handleLogout} style={{fontSize: 16}}>{`Đăng xuất`}</Link>
+        <Link onClick={handleLogout} style={{fontSize: 16}}>{t("logout")}</Link>
     );
 }
 

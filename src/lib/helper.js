@@ -38,3 +38,9 @@ export const isObjectEmpty = obj => Object.keys(obj).length === 0
 
 
 export const showNumber = number => new Intl.NumberFormat().format(number)
+
+export const getSubscription = (topic, qos = 2, body = {}) => ({
+    topic,
+    qos,
+    payload: JSON.stringify(body)
+})

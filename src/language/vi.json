@@ -1,0 +1,24 @@
+{
+    "waiting": "Vui lòng đợi...",
+    "hello": "Xin chào",
+    "logout": "Đăng xuất",
+    "title": "EPower App",
+    "language": "Ngôn ngữ",
+    "system": "Hệ thống",
+    "devices": "Thiết bị",
+    "device": "Thiết bị đang chọn",
+    "deviceName": "Tên thiết bị",
+    "deviceId": "ID thiết bị",
+    "status": "Trạng thái",
+    "action": "Action",
+    "newDeviceInfo": "Thông tin thiết bị mới",
+    "updateSucceed": "Cập nhật thông tin thiết bị thành công.",
+    "addNewSucceed": "Thêm thiết bị mới thành công",
+    "addNewFailure": "ID của thiết bị không được tìm thấy trong hệ thống. Vui lòng thử lại hoặc liên hệ chúng tôi qua telegram. ",
+    "deviceIdExisted": "ID thiết bị đã tồn tại.",
+    "deviceNameExisted": "Tên thiết bị đã tồn tại.",
+    "delete": "Xoá ?",
+    "deleteDeviceQ": "Bạn có chắn chắn muốn xoá thiết bị này không ?",
+    "requiredFieldError": "Vui lòng nhập thông tin !"
+
+}

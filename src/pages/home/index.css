@@ -11,8 +11,19 @@
     margin-top: 20px;
 }
 
+.item--text{
+
+}
+
+.item-value{
+    
+}
 @media only screen and (max-width: 600px){
     .devices{
+        width: 100%;
+    }
+
+    .system {
         width: 100%;
     }
 }

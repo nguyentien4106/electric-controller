@@ -5,6 +5,7 @@ import LogoutLink from '@/components/auth/LogoutLink';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { Cookie } from '../lib/cookies';
+import { useTranslation } from 'react-i18next';
 
 const Item = ({ icon, value }) => (
     <Space align='center'>
@@ -16,6 +17,7 @@ function UserComponent() {
     const [open, setOpen] = useState(false)
     const userRef = useRef()
     const userInfo = Cookie.getUserInfo()
+    const { t } = useTranslation()
 
     useEffect(() => {
         function handleClickOutside(event) {
@@ -31,13 +33,14 @@ function UserComponent() {
         
       }, [userRef]);
 
+
     const content = (
         <div
             className='user-options'
         >
             <div className='user-option'>
                 <Item 
-                    value={<strong style={{textAlign: "center"}}>Xin chào {userInfo.username}</strong>} 
+                    value={<strong style={{textAlign: "center"}}>{t("hello")} {userInfo.username}</strong>} 
                 />
             </div>
             <div className='user-option'>

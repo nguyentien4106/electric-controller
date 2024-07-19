@@ -18,6 +18,7 @@ import { setClient } from "../../state/mqtt/mqttSlice";
 import { AndroidOutlined, AppleOutlined } from '@ant-design/icons';
 import "./index.css"
 import System from "../../components/home/System";
+import { useTranslation } from "react-i18next";
 const height = "50%";
 const defaultValueParams = {
     pvPower: {
@@ -49,6 +50,7 @@ export default function Home() {
     const userInfo = Cookie.getUserInfo();
     const topic = userInfo.username;
     const dispatch = useDispatch();
+    const { t } = useTranslation()
 
     const connectToMQTT = () => {
         mqtt.connectAsync({
@@ -96,13 +98,13 @@ export default function Home() {
     const items = [
         {
             key: "system",
-            label: `System`,
+            label: t("system"),
             children: <System />,
             icon: <AppleOutlined />,
         },
         {
             key: "devices",
-            label: `Devices`,
+            label: t("devices"),
             children: <Devices />,
             icon: <AndroidOutlined />,
         },

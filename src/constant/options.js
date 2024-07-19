@@ -4,3 +4,9 @@ export const defaultLoginOptions = {
     port: 8084,
     path: "/mqtt"
 }
+
+export const defaultSubscription = (topic, qos = 2, payload = {}) => {
+    topic,
+    qos,
+    payload
+}

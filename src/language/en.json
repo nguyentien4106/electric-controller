@@ -1,0 +1,23 @@
+{
+    "waiting": "Please wait...",
+    "hello": "Hello",
+    "logout": "Logout",
+    "title": "Multi-language app",
+    "language": "Language",
+    "system" : "System",
+    "devices": "Devices",
+    "device": "Device",
+    "deviceName": "Device's Name",
+    "deviceId": "Device's ID",
+    "status": "Status",
+    "action": "Action",
+    "newDeviceInfo": "New Device's Information",
+    "addNewSucceed": "Add new device successfully.",
+    "updateSucceed": "Update device's info successfully.",
+    "addNewFailure": "Your Device's ID was not found in system. Please try again or contact us via telegram.",
+    "deviceIdExisted": "Device's ID is existed",
+    "deviceNameExisted": "Device's name is existed",
+    "delete": "Delete ?",
+    "deleteDeviceQ": "Are you sure to remove this device ?",
+    "requiredFieldError": "Please input this field !"
+}
