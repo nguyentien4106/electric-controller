@@ -19,7 +19,7 @@ i18n
             escapeValue: false,
         },
         backend: {
-            loadPath: `${getCurrentHost}/src/language/{{lng}}.json`,
+            loadPath: `${getCurrentHost}/public/locales/{{lng}}.json`,
         },
     });
 
