@@ -38,7 +38,7 @@ export default function Devices() {
 
     useEffect(() => {
         if (client) {
-            client.on("message", (topic, msg) => {
+            client?.on("message", (topic, msg) => {
                 if (topic === PING_TOPIC) {
                     const response = JSON.parse(msg);
                     if (response.verified) {
@@ -57,6 +57,7 @@ export default function Devices() {
                 }
             });
         }
+
     }, [client]);
 
     const onFinish = (device) => {

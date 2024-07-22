@@ -6,6 +6,7 @@ import MQTT from "../../lib/MQTT";
 import { getSubscription, getUserName } from "../../lib/helper";
 import ItemValue from "./ItemValue";
 import { useTranslation } from "react-i18next";
+import GaugeComponent from "react-gauge-component";
 
 export default function System() {
     const { devices } = useSelector((state) => state.devices);
@@ -16,7 +17,6 @@ export default function System() {
 
     const [systemData, setSystemData] = useState({});
     const [loading, setLoading] = useState(false);
-    const [value, setValue] = useState(1);
 
     useEffect(() => {
         let topic = "";
@@ -27,7 +27,8 @@ export default function System() {
         }
 
         MQTT.subscribe(client, getSubscription(topic));
-        client.on("message", (tp, msg) => {
+
+        client?.on("message", (tp, msg) => {
             if (tp === topic) {
                 const data = JSON.parse(msg);
                 const {
@@ -55,11 +56,28 @@ export default function System() {
         setTimeout(() => {
             setLoading(false);
         }, 2000);
+
         return () => {
+            MQTT.removeAllListeners(client);
             MQTT.unsubscribe(client, getSubscription(topic));
         };
     }, [deviceSystem]);
-    const { t } = useTranslation()
+    
+    const { t } = useTranslation();
+    const kbitsToMbits = (value) => {
+        if (value >= 1000) {
+            value = value / 1000;
+            if (Number.isInteger(value)) {
+                return value.toFixed(0) + " kWh";
+            } else {
+                return value.toFixed(1) + " kWh";
+            }
+        } else {
+            return value.toFixed(0) + " kWh";
+        }
+    };
+
+    const [settings, setSettings] = useState({});
 
     return (
         <Flex className="system" justify="center" vertical align="center">
@@ -73,10 +91,39 @@ export default function System() {
                     options={devices}
                 />
             </Space>
+
+            <div onClick={() => console.log('error')} style={{width: "100%"}}>
+                <GaugeComponent
+                    style={{
+                        width: "50%",
+                    }}
+                    className="gauge"
+                    arc={{
+                        nbSubArcs: 1500,
+                        colorArray: ["#5BE12C", "#F5CD19", "#EA4228"],
+                        width: 0.3,
+                        padding: 0.003,
+                    }}
+                    labels={{
+                        valueLabel: {
+                            fontSize: 40,
+                            formatTextValue: kbitsToMbits,
+                        },
+                        tickLabels: {
+                            type: "outer",
+                            valueConfig: {
+                                formatTextValue: kbitsToMbits,
+                            },
+                        },
+                    }}
+                    value={900}
+                    maxValue={3000}
+                />
+            </div>
             <Divider />
             <Spin
                 tip={<p>{t("waiting")}</p>}
-                spinning={loading}
+                // spinning={loading}
                 style={{ fontSize: 128 }}
                 size="large"
             >

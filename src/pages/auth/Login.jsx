@@ -19,6 +19,7 @@ import { Cookie } from "../../lib/cookies";
 import dayjs from "dayjs";
 import { KEY_DECODE } from "../../constant/settings";
 import CircularJSON from "circular-json";
+import { useTranslation } from "react-i18next";
 const { useToken } = theme;
 const { useBreakpoint } = Grid;
 const { Text, Title, Link } = Typography;
@@ -29,7 +30,7 @@ function Login() {
     const { message } = App.useApp();
     const { token } = useToken();
     const screens = useBreakpoint();
-
+    const { t } = useTranslation()
     const user = Cookie.getUser();
 
     console.log(user)
@@ -78,6 +79,7 @@ function Login() {
         const username = values.email.split("@")[0];
         const password = values.password;
         const clientId = username + dayjs().format("DD_MM_YYYY_HH:mm:ssZ");
+
         dispatch(show({type: "SHOW_LOADING"}));
 
         mqtt.connectAsync({
@@ -102,6 +104,7 @@ function Login() {
             dispatch(hide({type: "HIDE_LOADING"}));
         });
     };
+
 
 
     return (
@@ -135,7 +138,7 @@ function Login() {
                             fill="white"
                         />
                     </svg>
-                    <Title style={styles.title}>Log in</Title>
+                    <Title style={styles.title}>{t("login")}</Title>
                 </div>
                 <Form
                     name="normal_login"
@@ -175,10 +178,10 @@ function Login() {
                     </Form.Item>
                     <Form.Item style={{ marginBottom: "0px" }}>
                         <Button block="true" type="primary" htmlType="submit">
-                            Log in
+                            {t("login")}
                         </Button>
                         <div style={styles.footer}>
-                            <Text style={styles.text}>Contact 0359811663 to be provided account</Text>{" "}
+                            <Text style={styles.text}>{t("registerNotices")}</Text>{" "}
                         </div>
                     </Form.Item>
                 </Form>

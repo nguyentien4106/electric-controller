@@ -6,6 +6,27 @@ export default class MQTT {
         return mqtt.connectAsync({ ...defaultLoginOptions, opts });
     }
 
+    static connect(opts) {
+        const client = mqtt.connect({ ...defaultLoginOptions, opts });
+        return client
+    }
+
+    static removeListener(client, event){
+        console.log('client', client)
+        if(client){
+            client.removeListener(event, () => {
+                console.log('remove listener', event)
+            })
+        }
+    }
+
+    static removeAllListeners(client){
+        if(client){
+            client.removeAllListeners();
+            console.log('remove all listener')
+        }
+    }
+
     static disconnect = (client) => {
         if (client?.connected) {
             try {

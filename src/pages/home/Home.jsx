@@ -86,13 +86,13 @@ export default function Home() {
     }, []);
 
     useEffect(() => {
-        if (client) {
-            client.on("message", (tp, message) => {
-                if (tp === topic) {
-                    setMessages(message);
-                }
-            });
-        }
+        // if (client) {
+        //     client?.on("message", (tp, message) => {
+        //         if (tp === topic) {
+        //             setMessages(message);
+        //         }
+        //     });
+        // }
     }, [client]);
 
     const items = [
@@ -112,7 +112,7 @@ export default function Home() {
     return (
         <AuthorizeView>
             <Tabs
-                defaultActiveKey="devices"
+                defaultActiveKey="system"
                 items={items}
                 centered
             />
