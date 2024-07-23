@@ -22,6 +22,13 @@
 /* .gauge{
     width: 100%;
 } */
+.gauge-container{
+    width: 100%;
+}
+
+.gauge-chart {
+    width: 50%;
+}
 
 @media only screen and (max-width: 600px){
     .devices{
@@ -31,4 +38,12 @@
     .system {
         width: 100%;
     }
+    .gauge-container{
+        flex-direction: column;
+    }
+    
+    .gauge-chart {
+        width: 100%;
+    }
+    
 }

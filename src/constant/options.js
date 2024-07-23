@@ -10,3 +10,8 @@ export const defaultSubscription = (topic, qos = 2, payload = {}) => {
     qos,
     payload
 }
+
+export const defaultSettingsGaugeChart = {
+    value: 300,
+    maxValue: 1000
+}

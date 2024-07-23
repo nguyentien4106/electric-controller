@@ -1,4 +1,15 @@
-import { Divider, Flex, Select, Space, Spin, Typography } from "antd";
+import {
+    Button,
+    Divider,
+    Flex,
+    Form,
+    Input,
+    Modal,
+    Select,
+    Space,
+    Spin,
+    Typography,
+} from "antd";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setSystem } from "../../state/system/systemSlice";
@@ -7,6 +18,7 @@ import { getSubscription, getUserName } from "../../lib/helper";
 import ItemValue from "./ItemValue";
 import { useTranslation } from "react-i18next";
 import GaugeComponent from "react-gauge-component";
+import SettingModal from "../common/SettingModal";
 
 export default function System() {
     const { devices } = useSelector((state) => state.devices);
@@ -17,6 +29,9 @@ export default function System() {
 
     const [systemData, setSystemData] = useState({});
     const [loading, setLoading] = useState(false);
+    const [open, setOpen] = useState(false);
+
+    const { t } = useTranslation();
 
     useEffect(() => {
         let topic = "";
@@ -62,22 +77,6 @@ export default function System() {
             MQTT.unsubscribe(client, getSubscription(topic));
         };
     }, [deviceSystem]);
-    
-    const { t } = useTranslation();
-    const kbitsToMbits = (value) => {
-        if (value >= 1000) {
-            value = value / 1000;
-            if (Number.isInteger(value)) {
-                return value.toFixed(0) + " kWh";
-            } else {
-                return value.toFixed(1) + " kWh";
-            }
-        } else {
-            return value.toFixed(0) + " kWh";
-        }
-    };
-
-    const [settings, setSettings] = useState({});
 
     return (
         <Flex className="system" justify="center" vertical align="center">
@@ -91,41 +90,16 @@ export default function System() {
                     options={devices}
                 />
             </Space>
-
-            <div onClick={() => console.log('error')} style={{width: "100%"}}>
-                <GaugeComponent
-                    style={{
-                        width: "50%",
-                    }}
-                    className="gauge"
-                    arc={{
-                        nbSubArcs: 1500,
-                        colorArray: ["#5BE12C", "#F5CD19", "#EA4228"],
-                        width: 0.3,
-                        padding: 0.003,
-                    }}
-                    labels={{
-                        valueLabel: {
-                            fontSize: 40,
-                            formatTextValue: kbitsToMbits,
-                        },
-                        tickLabels: {
-                            type: "outer",
-                            valueConfig: {
-                                formatTextValue: kbitsToMbits,
-                            },
-                        },
-                    }}
-                    value={900}
-                    maxValue={3000}
-                />
-            </div>
+            <Flex className="gauge-container">
+                <SettingModal settingsKey={"ePower.gauge-setting1"} />
+                <SettingModal settingsKey={"ePower.gauge-setting2"} />
+            </Flex>
             <Divider />
             <Spin
                 tip={<p>{t("waiting")}</p>}
-                // spinning={loading}
-                style={{ fontSize: 128 }}
+                style={{ fontSize: 128, width: "100%" }}
                 size="large"
+                spinning={loading}
             >
                 <Flex gap={40}>
                     <ItemValue
@@ -133,7 +107,9 @@ export default function System() {
                         value={1200}
                         valueColor={"red"}
                         symbolColor={"blue"}
-                        text={<Typography.Title></Typography.Title>}
+                        text={
+                            <Typography.Text>{t("totalToday")}</Typography.Text>
+                        }
                         symbol={"kWh"}
                     />
                     <ItemValue
@@ -141,7 +117,9 @@ export default function System() {
                         value={2400}
                         valueColor={"red"}
                         symbolColor={"blue"}
-                        text={"Tổng"}
+                        text={
+                            <Typography.Text>{t("totalMonth")}</Typography.Text>
+                        }
                         symbol={"kWh"}
                     />
                 </Flex>

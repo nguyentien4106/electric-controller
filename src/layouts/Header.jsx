@@ -54,8 +54,8 @@ export default function Header() {
                     <Space>
                         <label>{t("language")}: </label>
                         <Space >
-                            <img src={en} height={i18n.language === "en" ? 48 : 24} onClick={() => changeLanguage("en")} />
-                            <img src={vi} height={i18n.language === "vi" ? 48 : 24} onClick={() => changeLanguage("vi")}/>
+                            <img className="pointer" src={en} height={i18n.language === "en" ? 48 : 24} onClick={() => changeLanguage("en")} />
+                            <img className="pointer" src={vi} height={i18n.language === "vi" ? 48 : 24} onClick={() => changeLanguage("vi")}/>
                         </Space>
                     </Space>
                     {renderAuth()}
