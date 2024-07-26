@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import GaugeComponent from "react-gauge-component";
 import { defaultSettingsGaugeChart } from "../../constant/options";
 
-export default function SettingModal({ settingsKey }) {
+export default function SettingModal({ settingsKey, value, title }) {
     const [settings, setSettings] = useState(
         getLocal(settingsKey, defaultSettingsGaugeChart)
     );
@@ -20,14 +20,11 @@ export default function SettingModal({ settingsKey }) {
             return newSettings;
         });
     };
-    useEffect(() => {
-        console.log(settings);
-    }, [settings]);
 
     return (
         <>
             <div onClick={() => setOpen(true)} className="pointer gauge-chart">
-                <h4 style={{ textAlign: "center" }}>{t(settingsKey)}</h4>
+                <h4 style={{ textAlign: "center" }}>{title}</h4>
                 <GaugeComponent
                     arc={{
                         nbSubArcs: 1500,
@@ -54,7 +51,7 @@ export default function SettingModal({ settingsKey }) {
                             },
                         },
                     }}
-                    value={settings.value}
+                    value={value}
                     maxValue={settings.maxValue}
                 />
             </div>

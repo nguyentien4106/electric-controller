@@ -19,7 +19,7 @@ import ItemValue from "./ItemValue";
 import { useTranslation } from "react-i18next";
 import GaugeComponent from "react-gauge-component";
 import SettingModal from "../common/SettingModal";
-
+import jsf from "json-schema-faker";
 export default function System() {
     const { devices } = useSelector((state) => state.devices);
     const { deviceSystem } = useSelector((state) => state.system);
@@ -30,7 +30,7 @@ export default function System() {
     const [systemData, setSystemData] = useState({});
     const [loading, setLoading] = useState(false);
     const [open, setOpen] = useState(false);
-
+    const [testNumber, setTestNumber] = useState(0)
     const { t } = useTranslation();
 
     useEffect(() => {
@@ -78,6 +78,43 @@ export default function System() {
         };
     }, [deviceSystem]);
 
+    const handleTest = () => {
+        if(testNumber){
+            clearInterval(testNumber)
+            setTestNumber(0)
+            return
+        }
+        const schema = {
+            type: "object",
+            properties: {
+                vPV: { type: "number", minimum: 1, maximum: 300},
+                iPV: { type: "number", minimum: 1, maximum: 400},
+                wPV: { type: "number", minimum: 1, maximum: 300},
+                vBat: { type: "number", minimum: 1, maximum: 123},
+                iBat: { type: "number", minimum: 1, maximum: 331},
+                wBat: { type: "number", minimum: 1, maximum: 314},
+                h: { type: "number", minimum: 1, maximum: 312},
+                tempDev: { type: "number", minimum: 1, maximum: 311},
+                tempBat: { type: "number", minimum: 1, maximum: 311},
+                sp: { type: "number", minimum: 1, maximum: 331},
+                tdkWh: { type: "number", minimum: 1, maximum: 387},
+                sumkWh: { type: "number", minimum: 1, maximum: 354},
+                typeBat: { type: "number", minimum: 1, maximum: 312},
+                status: { type: "number", minimum: 1, maximum: 332},
+            },
+            required: ["vPV", "iPV", "wPV", "vBat", "iBat", "wBat", "h", "tempDev", "tempBat", "sp", "tdkWh", "sumkWh", "typeBat", "status"],
+        };
+
+
+        const intervalId = window.setInterval(function(){
+            // call your function here
+            const fakeData = jsf.generate(schema);
+            setSystemData(fakeData)
+        }, 1500);
+
+        setTestNumber(intervalId)
+    };
+
     return (
         <Flex className="system" justify="center" vertical align="center">
             <Space size={40}>
@@ -89,22 +126,56 @@ export default function System() {
                     onChange={(value) => dispatch(setSystem(value))}
                     options={devices}
                 />
+                <Button onClick={handleTest}>{testNumber ? "Stop Test" : "Start Test"}</Button>
+
             </Space>
             <Flex className="gauge-container">
-                <SettingModal settingsKey={"ePower.gauge-setting1"} />
-                <SettingModal settingsKey={"ePower.gauge-setting2"} />
+                <SettingModal
+                    settingsKey={"ePower.gauge-setting-today"}
+                    value={systemData.vPV}
+                    title={t("vPV")}
+                />
+                <SettingModal
+                    settingsKey={"ePower.gauge-setting-month"}
+                    value={systemData.iPV}
+                    title={t("iPV")}
+                />
             </Flex>
             <Divider />
+
             <Spin
                 tip={<p>{t("waiting")}</p>}
                 style={{ fontSize: 128, width: "100%" }}
                 size="large"
                 spinning={loading}
             >
+                <Flex gap={40} justify="center" style={{ width: "100%" }}>
+                    <ItemValue
+                        color={"red"}
+                        value={systemData.tdkWh}
+                        valueColor={"red"}
+                        symbolColor={"red"}
+                        text={
+                            <Typography.Text>{t("totalToday")}</Typography.Text>
+                        }
+                        symbol={"kWh"}
+                    />
+                    <ItemValue
+                        color={"red"}
+                        value={systemData.sumkWh}
+                        valueColor={"blue"}
+                        symbolColor={"blue"}
+                        text={
+                            <Typography.Text>{t("totalMonth")}</Typography.Text>
+                        }
+                        symbol={"kWh"}
+                    />
+                </Flex>
+                <Divider />
                 <Flex gap={40}>
                     <ItemValue
                         color={"red"}
-                        value={1200}
+                        value={systemData.tempDev}
                         valueColor={"red"}
                         symbolColor={"blue"}
                         text={
@@ -114,7 +185,27 @@ export default function System() {
                     />
                     <ItemValue
                         color={"red"}
-                        value={2400}
+                        value={systemData.tempBat}
+                        valueColor={"red"}
+                        symbolColor={"blue"}
+                        text={
+                            <Typography.Text>{t("totalMonth")}</Typography.Text>
+                        }
+                        symbol={"kWh"}
+                    />
+                    <ItemValue
+                        color={"red"}
+                        value={systemData.sp}
+                        valueColor={"red"}
+                        symbolColor={"blue"}
+                        text={
+                            <Typography.Text>{t("totalToday")}</Typography.Text>
+                        }
+                        symbol={"kWh"}
+                    />
+                    <ItemValue
+                        color={"red"}
+                        value={systemData.wPV}
                         valueColor={"red"}
                         symbolColor={"blue"}
                         text={

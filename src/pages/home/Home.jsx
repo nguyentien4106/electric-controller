@@ -15,10 +15,11 @@ import consumptionPowerImg from "@/assets/consumptionPower.png";
 import { useNavigate } from "react-router-dom";
 import MQTT from "../../lib/MQTT";
 import { setClient } from "../../state/mqtt/mqttSlice";
-import { AndroidOutlined, AppleOutlined } from '@ant-design/icons';
+import { AndroidOutlined, AppleOutlined, SettingOutlined } from '@ant-design/icons';
 import "./index.css"
 import System from "../../components/home/System";
 import { useTranslation } from "react-i18next";
+import Settings from "../../components/home/Settings";
 const height = "50%";
 const defaultValueParams = {
     pvPower: {
@@ -107,6 +108,12 @@ export default function Home() {
             label: t("devices"),
             children: <Devices />,
             icon: <AndroidOutlined />,
+        },
+        {
+            key: "settings",
+            label: t("settings"),
+            children: <Settings />,
+            icon: <SettingOutlined />,
         },
     ]
     return (
