@@ -55,6 +55,8 @@ export default function Devices() {
                         setLoading(false);
                     }
                 }
+
+                console.log(topic, message)
             });
         }
 
